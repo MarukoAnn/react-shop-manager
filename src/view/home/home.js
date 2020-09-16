@@ -35,7 +35,7 @@ export default function Home(){
 					 <h2 style={{marginLeft: '2vw', color: '#fff'}}>商城管理平台</h2>
 				 </div>
 				 <div style={{width: '10%',display:'flex',alignItems: 'center'}}>
-					 <Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>AN</Avatar>
+					 <Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>An</Avatar>
 					 <span style={{color: '#fff', marginLeft: '10px'}}>admin</span>
 				 </div>
 			 </div>
