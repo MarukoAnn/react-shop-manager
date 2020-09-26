@@ -58,14 +58,13 @@ axios.interceptors.response.use( (config) => {
 				title: '请求错误',
 				content: (
 					<div>
-						<p>{config.data.msg}</p>
-						<p>{config.config.baseURL + config.config.url}</p>
+						<p>{config.data.massage}</p>
+						{/*<p>{config.config.baseURL + config.config.url}</p>*/}
 					</div>
 				),
 				okText: '确定'
 			});
 		}
-
 	}else {
 		Modal.error({
 			title: '链接服务器失败, 请稍后重试',

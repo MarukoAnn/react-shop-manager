@@ -33,6 +33,7 @@ function lnTable(){
 				columns={data.header}
 				dataSource={data.value}
 				scroll={{ x: 1000, y: 540 }}
+				pagination={false}
 			/>
 		</div>
 	)
