@@ -42,29 +42,46 @@ export default function Brand(){
 	// 初始化列表函数
 	const  initBrandTableList = () => {
 		setLoading(true)
-		verSrv.getBrandList(`key=o&page=1&rows=9999&sortBy=id&desc=false`).then(val => {
-			console.log(val);
-			const header = [{
-				title: 'id',
+		// const dataSource = [
+		// 	{
+		// 		key: '1',
+		// 		name: '胡彦斌',
+		// 		age: 32,
+		// 		address: '西湖区湖底公园1号',
+		// 	},
+		// 	{
+		// 		key: '2',
+		// 		name: '胡彦祖',
+		// 		age: 42,
+		// 		address: '西湖区湖底公园1号',
+		// 	},
+		// ];
+
+		const columns = [
+			{
+				title: '编号',
+				dataIndex: 'id',
 				key: 'id',
-				fixed: 'right',
-			},{
-				title: '名称',
+			},
+			{
+				title: '名字',
+				dataIndex: 'name',
 				key: 'name',
-				fixed: 'right',
-			},{
+			},
+			{
 				title: '图片地址',
+				dataIndex: 'image',
 				key: 'image',
-				fixed: 'right',
-			},{
+			},
+			{
 				title: '字母',
+				dataIndex: 'letter',
 				key: 'letter',
-				fixed: 'right',
-			}];
-			val.data.header.forEach(val => {
-				header.push({title: val.name, dataIndex: val.id});
-			})
-			header.forEach(v => {
+			},
+		];
+		verSrv.getBrandList(`key=o&page=1&rows=99999&sortBy=id&desc=false`).then(val => {
+			console.log(val.items[0]);
+			columns.forEach(v => {
 				// 设置行省略过长的数据,
 				v.ellipsis = {showTitle: false,}
 				// 使用 tooltip 显示省略的数据
@@ -74,22 +91,22 @@ export default function Brand(){
 					</Tooltip>
 				}
 			})
-			header.push(
-				{
-					title: '操作',
-					key: 'operation',
-					fixed: 'right',
-					width: 100,
-					render: (row) => {
-						return {children: btnList(row)}
-					},
-				},
-			)
-			setColumns(header)
+			// columns.push(
+			// 	{
+			// 		title: '操作',
+			// 		key: 'operation',
+			// 		fixed: 'right',
+			// 		width: 100,
+			// 		render: (row) => {
+			// 			return {children: btnList(row)}
+			// 		},
+			// 	},
+			// )
+			setColumns(columns)
 			setLoading(false)
-			setData(val.data.items.map((val, index) => {
-				val.key = index + 1
-				return val
+			setData(val.items.map((v, index) => {
+				v.key = index + 1
+				return v
 			}));
 		})
 	}
@@ -123,12 +140,7 @@ export default function Brand(){
 	}
 	// from 表单效验成功后回调的函数
 	const onFinish = () => {
-		const subIconData = JSON.parse(JSON.stringify(form.getFieldsValue()));
-		gameList.forEach(val => {
-			if (val.game_id === subIconData.game_id){
-				subIconData.game_name = val.game_name
-			}
-		})
+
 		// if (resFlag === 'add') {
 		// 	verSrv.addIconInfo(subIconData).then(val => {
 		// 		if (val.code === 0){
@@ -232,16 +244,10 @@ export default function Brand(){
 	// 返回视图
 	return (
 		<div className="brand">
-			<div>
-				<Select  placeholder="请选择游戏" style={{width: '12%',marginRight: '10px'}}  onChange={(e) => {console.log(e);setGameType(e)}}>
-					{
-						gameList.map(v => {
-							return <Option key={v.game_id} value={v.game_id}>{v.game_name}</Option>
-						})
-					}
-				</Select>
-				<Button onClick={() => {initBrandTableList(gameType)}} style={{background: '#27904C',color: '#fff',border: '1px solid #27904C'}}>搜索</Button>
-			</div>
+			{/*<div>*/}
+
+			{/*	<Button onClick={() => {initBrandTableList()}} style={{background: '#27904C',color: '#fff',border: '1px solid #27904C'}}>搜索</Button>*/}
+			{/*</div>*/}
 			<div className="btn-list">
 				<Button type="primary" onClick={showAddModel}>新增</Button>
 				{/*<Button type="primary" onClick={() => {console.log(url)}}>获取url</Button>*/}

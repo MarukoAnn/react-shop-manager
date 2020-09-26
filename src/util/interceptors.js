@@ -51,7 +51,7 @@ axios.interceptors.response.use( (config) => {
 	// store.dispatch(action);
 	// 返回请求正确的结果
 	if (config.status === 200) {
-		if (config.data.code === 0){
+		if (!config.data.status){
 			return config.data;
 		}else {
 			Modal.error({

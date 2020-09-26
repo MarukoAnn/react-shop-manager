@@ -5,7 +5,7 @@ import {HashRouter as Router, Link, Redirect, Route} from "react-router-dom";
 import { Layout, Menu, Avatar } from 'antd';
 import './home.css'
 import {
-	UserOutlined,
+    LaptopOutlined,
 } from '@ant-design/icons';
 import routes from '../../router/routers'
 import version from '../version/version'
@@ -42,10 +42,10 @@ export default function Home(){
           </Header>
         <Layout className="site-layout">
          <Router>
-          <Sider trigger={null} collapsible collapsed={collapsed} style={{display: process.env.NODE_ENV === 'development'? 'block' : 'none'}}>
+          <Sider trigger={null} collapsible collapsed={collapsed}>
           {/*<div className="logo" />*/}
           <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
-            <Menu.Item key="1" icon={<UserOutlined />}>
+            <Menu.Item key="1" icon={<LaptopOutlined />}>
               <Link to="/home/Brand" >品牌列表</Link>
             </Menu.Item>
             {/*<Menu.Item key="2" icon={<VideoCameraOutlined />}>*/}
