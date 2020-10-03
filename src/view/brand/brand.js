@@ -22,30 +22,7 @@ const validateMessages = {
         range: '${label} must be between ${min} and ${max}',
     },
 };
-const columns = [
-    {
-        title: '编号',
-        dataIndex: 'id',
-        key: 'id',
-        sorter: (a, b) => a.id - b.id,
-    },
-    {
-        title: '名字',
-        dataIndex: 'name',
-        key: 'name',
-    },
-    {
-        title: '图片',
-        dataIndex: 'image',
-        key: 'image',
-    },
-    {
-        title: '字母',
-        dataIndex: 'letter',
-        key: 'letter',
-        sorter: (a, b) => a.letter.localeCompare(b.letter)
-    },
-];
+let columns = [];
 let page = 1;
 let rows = 10;
 export default function Brand() {
@@ -66,20 +43,38 @@ export default function Brand() {
     const initBrandTableList = () => {
         setLoading(true)
         verSrv.getBrandList(`key=${keys}&page=${page}&rows=${rows}&sortBy='id'&desc=false`).then(val => {
-            setTotalItem(val.total);
+            setTotalItem(val.data.total);
+            columns = [
+                {
+                    title: '编号',
+                    dataIndex: 'id',
+                    key: 'id',
+                    sorter: (a, b) => a.id - b.id,
+                    render: text => <Tooltip placement="topLeft" title={text}>{text}</Tooltip>
+                },
+                {
+                    title: '名字',
+                    dataIndex: 'name',
+                    key: 'name',
+                    render: text => <Tooltip placement="topLeft" title={text}>{text}</Tooltip>
+                },
+                {
+                    title: '图片',
+                    dataIndex: 'image',
+                    key: 'image',
+                    render: text => <img src={text} alt=""/>
+                },
+                {
+                    title: '字母',
+                    dataIndex: 'letter',
+                    key: 'letter',
+                    sorter: (a, b) => a.letter.localeCompare(b.letter),
+                    render: text => <Tooltip placement="topLeft" title={text}>{text}</Tooltip>
+                },
+            ]
             columns.forEach(v => {
                 // 设置行省略过长的数据,
-                v.ellipsis = {showTitle: false,}
-                // 使用 tooltip 显示省略的数据
-                v.render = (row) => {
-                    if (v.title === '图片') {
-                        return <img src={row} alt="logo"/>
-                    } else {
-                        return <Tooltip placement="topLeft" title={row}>
-                            {row}
-                        </Tooltip>
-                    }
-                }
+                v.ellipsis = {showTitle: false}
             })
             columns.push(
                 {
@@ -93,14 +88,12 @@ export default function Brand() {
                 },
             )
             setLoading(false)
-            setData(val.items.map((v, index) => {
+            val.data.items.forEach((v, index) => {
                 v.key = index + 1
+            })
+            setData(val.data.items.map(v => {
                 return v
             }));
-        }).catch(val => {
-            setLoading(false)
-            alert(val)
-            // message.error(val);
         })
     }
 
@@ -241,7 +234,7 @@ export default function Brand() {
                 }} onPressEnter={() => {
                     page = 1;
                     initBrandTableList();
-                }} style={{width: 200}} />
+                }} style={{width: 200}}/>
                 {/*<Button onClick={() => { }} style={{background: '#27904C',color: '#fff',border: '1px solid #27904C'}}>搜索</Button>*/}
             </div>
             <div className="btn-list">
@@ -261,6 +254,10 @@ export default function Brand() {
                     hideOnSinglePage
                     onChange={(e) => {
                         page = e;
+                        initBrandTableList()
+                    }}
+                    onShowSizeChange={(current, size) => {
+                        rows = size;
                         initBrandTableList()
                     }}
                     showTotal={total => `总共 ${total}条`}
