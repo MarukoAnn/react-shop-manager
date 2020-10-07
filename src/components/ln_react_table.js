@@ -14,19 +14,13 @@ function lnTable(props){
 	}, [])
 
 	const rowSelection = {
-	 onChange: (selectedRowKeys, selectedRows) => {
-		 console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-	 },
-	 getCheckboxProps: record => ({
-		 name: record.name,
-	 }),
+		 onChange: (selectedRowKeys, selectedRows) => {
+			 console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+		 },
+		 getCheckboxProps: record => ({
+			 name: record.name,
+		 }),
 	};
-	const onExpands = (e, row) => {
-		setKey(row.key)
-		props.treeOnChnage(row)
-		console.log(row.key)
-	}
-
 
 	return(
 		<div>
@@ -42,7 +36,7 @@ function lnTable(props){
 				scroll={{ x: 1000, y: 540 }}
 				pagination={false}
 				defaultExpandedRowKeys={key}
-				onExpand={onExpands}
+				defaultExpandAllRows={false}
 				footer={tabledata.isFooter? () => <div onClick={props.addTableClick}><span style={{'margin': '10px'}}>新增节点</span><PlusOutlined /></div>: false}
 			/>
 		</div>

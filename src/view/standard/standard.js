@@ -5,7 +5,7 @@ import {EditFilled, DeleteFilled, ExclamationCircleOutlined, PlusOutlined} from 
 import {Button, Modal, Form, Input, Tree, Select, message, Pagination, Tooltip, Switch, InputNumber} from 'antd'
 import {tableContext, fileContext} from '../../util/context'
 import LnUploadFile from '../../components/ln_upload_chunk'
-import './sort.scss'
+import './standard.scss'
 // 设置btn 按钮
 const layout = {
     labelCol: {span: 4},
@@ -39,7 +39,7 @@ let columns = [
     },
 ];
 let parentIdList =[]
-export default function Sort() {
+export default function Standard() {
     const [keys, setKeys] = useState('');
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -47,25 +47,26 @@ export default function Sort() {
     const [form] = Form.useForm();
     // 生命周期钩子
     useEffect(() => {
-        initBrandTableList(0);
+        initBrandTableList();
     }, [])
 
     // 初始化列表函数
     const initBrandTableList = (data) => {
         setLoading(true)
-        verSrv.getSortTrees(`id=${data}`).then(val => {
+        verSrv.getStandardList(`gid=&cid=&searching=false`).then(val => {
+            console.log(val)
             // 请求第二级的
             // 设置 操作按钮标签
-            columns[1].render = (row) => {
-                return {children: btnList(row)}
-            }
-            columns.forEach(v => {
-                // 设置行省略过长的数据,
-                v.ellipsis = {showTitle: false,}
-            })
-            // 设置不用加载动画
-            setLoading(false)
-            setData(val.data);
+            // columns[1].render = (row) => {
+            //     return {children: btnList(row)}
+            // }
+            // columns.forEach(v => {
+            //     // 设置行省略过长的数据,
+            //     v.ellipsis = {showTitle: false,}
+            // })
+            // // 设置不用加载动画
+            // setLoading(false)
+            // setData(val.data);
         })
     }
 
@@ -82,7 +83,7 @@ export default function Sort() {
         }
     }
     // 获取父级id列表
-   const getTreeList = (id, callback) => {
+    const getTreeList = (id, callback) => {
         verSrv.getSortTree(`pid=${id}`).then(val => {
             if (val.data){
                 parentIdList = val.data;

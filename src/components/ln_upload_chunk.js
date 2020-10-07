@@ -102,21 +102,44 @@ function UploadFile(props) {
 	// 上传图片
 	const uploadImgRequest = (file) => {
 		const imgform = new FormData()
-		imgform.append('file', file)
+		console.log(file.name)
+		// imgform.append('file', file)
 		// setPercent(Math.floor(Math.random(0, 1) * 100))
 		// 设置上传图片的接口
-		uploadSrv.updateIconImg(imgform).then(val => {
-			// 设置加载条的进度
-			setPercent(100)
-			// 传将地址输给父组件
-			changeUrl(val.data.url)
-			// 延时关闭弹窗 清空数据
-			setTimeout(() => {
-				setVisible(false)
-				setPercent(0)
-				fileRef.current.value = ''
-			}, 1000)
+		uploadSrv.getSinature().then(value => {
+			console.log(value)
+			const logTime = Date.parse(new Date()) + Math.ceil(Math.random().toFixed(2)*100) + Math.ceil(Math.random()*10);
+			console.log(logTime)
+			imgform.append('Policy', value.data.policy)
+			imgform.append('OSSAccessKeyId', value.data.accessId)
+			imgform.append('Signature', value.data.signature)
+			imgform.append('success_action_status', '200')
+			imgform.append('key', file.name.includes('jpg')? `${logTime}.jpg`: `${logTime}.png`);
+			imgform.append('file', file)
+
+			uploadSrv.getImageUrl(`https:${value.data.host}`, imgform).then(res => {
+				let name = imgform.get('key')
+				console.log(`https://${value.data.host}/${name}`)
+					setPercent(100)
+					// 传将地址输给父组件
+					changeUrl(`https://${value.data.host}/${name}`)
+					// 延时关闭弹窗 清空数据
+					setTimeout(() => {
+						setVisible(false)
+						setPercent(0)
+						fileRef.current.value = ''
+					}, 1000)
+			})
 		})
+		//
+		// client.put().then(url => {
+		//
+		// 	// 	// 设置加载条的进度
+
+		// })
+		// uploadSrv.updateIconImg(imgform).then(val => {
+
+		// })
 	}
 	// 弹窗视图
 	const Model =  <Modal

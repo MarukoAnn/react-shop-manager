@@ -22,8 +22,10 @@ axios.defaults.timeout = 30000;
 
 axios.interceptors.request.use((config) => {
 	if(!Object.is(config.url, undefined)){
-		if (config.url === '/pcPackageUpload.class.php'){
-			config.baseURL = 'http://192.168.8.200/packageNew/daemon/Controller'
+		if (config.url.includes('https')){
+			config.baseURL = ''
+			// config.url = config.url.slice(6,  config.url.length -1)
+			// config.headers.post['Content-Type'] =  'multipart/form-data'
 		}
 		// const action = changeLoadingAction();
 		// store.dispatch(action);
@@ -116,6 +118,28 @@ class ClientHttp {
 				method: 'get',
 				url: url,
 				params: data
+			}).then(res => {
+					resolve(res)
+				}
+			).catch(err => {
+				reject(err);
+			})
+		}));
+	}
+	/**
+	 * get 方式
+	 * @param url 请求连接
+	 * @param data 请求参数
+	 *  服务端签名上传 oos
+	 */
+
+	getImgUrl(url, datas) {
+		return new Promise(((resolve, reject) => {
+			axios({
+				method: 'post',
+				url: url,
+				data: datas,
+				header: { 'Content-Type': 'multipart/form-data' }
 			}).then(res => {
 					resolve(res)
 				}
